@@ -16,8 +16,13 @@ Segue abaixo a disposição do projeto.
 
 ## Estrutura dos arquivos
 
+https://towardsdatascience.com/modularise-your-notebook-into-scripts-5d5ccaf3f4f3
+
 ``` bash
-├───cursos_referencias <Arquivos de refência>
-├───datasets <Folder para download dos Datasets Kaggle>
-└───portifolio <Noteboks>
+
+├───/etc/cursos_referencias <Arquivos de refência>
+├───data                    <various data files: Kaggle / UCI / etc>
+├───src                     <executable scripts>
+└───noteboks                <Noteboks>
+
 ```
