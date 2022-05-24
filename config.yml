@@ -1,5 +1,9 @@
 # YAML Document starts with ---
 # Comments start with #
+KUBERNETES:
+  CONFIG: kubernetes.conf
+  KUBECTLPATH: kubectl.exe
+  LOGFILE: kubernetes.log
 UserName: Alicia
 Password: pinga123 * 
 phone: 3256
