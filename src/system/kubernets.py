@@ -4,52 +4,59 @@ import re
 import time
 
 ####################################################################################
-# Setting KUBECONFIG env
+# Kubernetes Commands
 ####################################################################################
 
 def osexeccmd(command):
     stream = os.popen(command)
     output = stream.readlines()
-    for line in output:
-        print(line)
+    return output
 
-def setKubeConfig(configdata):
-    kubeconfig = configdata['KUBERNETES']['CONFIG']
+def setKubeConfig(kubeconfig):
     os.environ['KUBECONFIG'] = kubeconfig
-    KUBECONFIGENV = os.getenv('KUBECONFIG')
-    print(KUBECONFIGENV)
+    print(os.getenv('KUBECONFIG'))
 
-def getcontext(configdata):
-    command = '{} config get-contexts'.format(configdata['KUBERNETES']['KUBECTLPATH'])
-    osexeccmd(command)
+def getcontext():
+    command = 'kubectl config get-contexts'
+    return osexeccmd(command)
 
-def getcurrentcontext(configdata):
-    command = '{} config current-context'.format(configdata['KUBERNETES']['KUBECTLPATH'])
-    osexeccmd(command)
+def getcurrentcontext():
+    command = 'kubectl config current-context'
+    return osexeccmd(command)
 
+def setcontext(context):
+    command = 'kubectl config use-context {}'.format(context)
+    return osexeccmd(command)
 
-def setcontext(configdata,context):
-    command = '{} config use-context {}'.format(configdata['KUBERNETES']['KUBECTLPATH'],context)
-    osexeccmd(command)
+def getnamespaces():
+    command = 'kubectl get namespace'
+    return osexeccmd(command)
 
-def getnamespaces(configdata):
-    command = '{} get namespace'.format(configdata['KUBERNETES']['KUBECTLPATH'])
-    osexeccmd(command)
+def getpodsbynamespace(namespace):
+    command = 'kubectl get pods  -n {}'.format(namespace)
+    return osexeccmd(command)
 
-def getpodsbynamespace(configdata,namespace):
-    command = '{} get pods  -n {}'.format(configdata['KUBERNETES']['KUBECTLPATH'], namespace)
-    osexeccmd(command)
+def getdeploymentsbynamespace(namespace):
+    command = 'kubectl get deployments -o wide -n {}'.format(namespace)
+    return osexeccmd(command)
 
-def getlogsbydeployment(configdata,namespace,deployment,time='30m'):
-    command = '{} -n {} logs Deployment/{} --all-containers=true --since={} >> {}'\
-    .format(configdata['KUBERNETES']['KUBECTLPATH'], namespace, deployment,time,configdata['KUBERNETES']['LOGFILE'])
-    print(command)
-    osexeccmd(command)
+def getdeployments():
+    command = 'kubectl get deployments'
+    return osexeccmd(command)
 
-    #webservices
-#def getpods(configdata):
-#    command = '{} get pods -n {namespace} -l app={app}'.format(configdata['KUBERNETES']['KUBECTLPATH'],namespace=namespace,app=app)
-#    osexeccmd(command)
+def getservices():
+    command = 'kubectl get services'
+    return osexeccmd(command)
 
-#def getLogsByDeployment():
-#    log_ecommerce = '-n {} logs Deployment/{} --all-containers=true --since=5h >> '
+def getservicesbynamespace(namespace):
+    command = 'kubectl get services -n {}'.format(namespace)
+    return osexeccmd(command)
+    
+def getlogsbydeployment(namespace,deployment,time='30m'):
+    command = 'kubectl -n {} logs Deployment/{} --all-containers=true --since={}'.format(namespace, deployment,time)
+    return osexeccmd(command)
+
+def getlogsbydeploymenttofile(namespace,deployment,logfile='kubernetes.log',time='30m'):
+    command = 'kubectl -n {} logs Deployment/{} --all-containers=true --since={} >> {}'\
+    .format(namespace, deployment,time,logfile)
+    return osexeccmd(command)
